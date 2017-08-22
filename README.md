@@ -14,7 +14,7 @@ You may be tempted to add timeouts and loops in your Inspec tests, however, this
 less deterministic and slower to execute and harder to maintain as you continue the pattern throughout your profiles or tests.
 
 So with that in mind, all we need is something in the recipe that effectively gives the service or application some time to start up before we test with Inspec.
-If the Service never actually starts, then by-golly, fail the converge! Ruby Blocks in Chef have often been misused, however this is one of few times that using
+If the Service never actually starts, then by-golly, fail the converge! Ruby Blocks in Chef have often been misused, however this is one of the few times that using
 a `ruby_block` in your recipe is the perfect solution!
 
 This specific example will be a Windows example, so we need to require the `Win32::Service` library to help facilitate accurately checking
@@ -59,7 +59,7 @@ ruby_block 'Wait on Service Start' do
 end
 ```
 
-Finally, the Inspec test is totally agnostic of the slow startup time and just runs a check as normal with sleeping or looping.
+Finally, the Inspec test is totally agnostic of the slow startup time and just runs a check as normal without sleeping or looping.
 ```ruby
 # test/smoke/default/default_test.rb
 # This would be the service that takes a long time to initialize and start
