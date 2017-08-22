@@ -1,0 +1,36 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
+  # You may wish to disable always updating cookbooks in CI or other testing environments.
+  # For example:
+  #   always_update_cookbooks: <%= !ENV['CI'] %>
+  always_update_cookbooks: true
+
+verifier:
+  name: inspec
+
+platforms:
+  - name: win-2012r2-standard-amd64-nocm
+    driver:
+      box: opentable/win-2012r2-standard-amd64-nocm
+      box_url: https://atlas.hashicorp.com/opentable/boxes/win-2012r2-standard-amd64-nocm/versions/1.0.0/providers/virtualbox.box
+      guest: windows
+      network:
+      - ["forwarded_port", {guest: 3389, host: 3389}]
+      - ["forwarded_port", {guest: 5985, host: 5985}]
+      customize:
+        memory: 4096
+        natdnshostresolver1: "on"
+        natdnsproxy1: "on"
+
+suites:
+  - name: default
+    run_list:
+      - recipe[test-slow-service::default]
+    verifier:
+      inspec_tests:
+        - test/smoke/default
+    attributes:
